@@ -11,10 +11,22 @@ export type CredentialsError =
     | "password-required"
     | "password-too-short";
 
-const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
 export function isValidEmail(email: string): boolean {
-    return EMAIL_PATTERN.test(email.trim());
+    const trimmed = email.trim();
+
+    if (trimmed.length === 0 || /\s/.test(trimmed)) {
+        return false;
+    }
+
+    const at = trimmed.indexOf("@");
+
+    if (at <= 0 || at !== trimmed.lastIndexOf("@")) {
+        return false;
+    }
+
+    const labels = trimmed.slice(at + 1).split(".");
+
+    return labels.length >= 2 && labels.every((label) => label.length > 0);
 }
 
 export function isComplete(credentials: Credentials): boolean {

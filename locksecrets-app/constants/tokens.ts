@@ -10,6 +10,7 @@ export const colors = {
     border: "rgba(255,255,255,0.08)",
     borderStrong: "rgba(82, 45, 45, 0.1)",
     onAccent: "#000000",
+    danger: "#ff5252",
 } as const;
 
 export const spacing = {
