@@ -1,10 +1,12 @@
 import type { CredentialsError } from "@/models/credentials";
 
+export type LoginError = CredentialsError | "invalid-credentials";
+
 export type LoginViewModel = {
     email: string;
     password: string;
     isPasswordVisible: boolean;
-    error: CredentialsError | null;
+    error: LoginError | null;
     isSubmitting: boolean;
     canSubmit: boolean;
     setEmail: (value: string) => void;
