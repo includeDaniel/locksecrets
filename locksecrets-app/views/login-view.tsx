@@ -6,14 +6,14 @@ import { AppButton } from "@/components/app-button";
 import { AppTextField } from "@/components/app-text-field";
 import { colors, radii, sizes, spacing, typography } from "@/constants/tokens";
 import { PASSWORD_MIN_LENGTH } from "@/models/credentials";
-import type { CredentialsError } from "@/models/credentials";
-import type { LoginViewModel } from "@/viewmodels/login-viewmodel";
+import type { LoginError, LoginViewModel } from "@/viewmodels/login-viewmodel";
 
-const ERROR_MESSAGES: Record<CredentialsError, string> = {
+const ERROR_MESSAGES: Record<LoginError, string> = {
     "email-required": "Enter your email address.",
     "email-invalid": "That doesn't look like an email address.",
     "password-required": "Enter your password.",
     "password-too-short": `Password must be at least ${PASSWORD_MIN_LENGTH} characters.`,
+    "invalid-credentials": "Email or password is incorrect.",
 };
 
 export function LoginView(vm: LoginViewModel) {
