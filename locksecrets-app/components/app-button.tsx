@@ -5,7 +5,7 @@ import { colors, radii, sizes, typography } from "@/constants/tokens";
 type AppButtonProps = {
     label: string;
     onPress: () => void;
-    variant?: "primary" | "secondary";
+    variant?: "primary" | "secondary" | "danger";
     disabled?: boolean;
     loading?: boolean;
 };
@@ -17,7 +17,7 @@ export function AppButton({
     disabled = false,
     loading = false,
 }: Readonly<AppButtonProps>) {
-    const isPrimary = variant === "primary";
+    const isSecondary = variant === "secondary";
     const isInteractive = !disabled && !loading;
 
     return (
@@ -29,19 +29,21 @@ export function AppButton({
             accessibilityState={{ disabled: !isInteractive, busy: loading }}
             style={({ pressed }) => [
                 styles.base,
-                isPrimary ? styles.primary : styles.secondary,
+                styles[variant],
                 !isInteractive && styles.inactive,
                 pressed && styles.pressed,
             ]}
         >
             {loading ? (
                 <ActivityIndicator
-                    color={isPrimary ? colors.onAccent : colors.textPrimary}
+                    color={isSecondary ? colors.textPrimary : colors.onAccent}
                 />
             ) : (
                 <Text
                     style={
-                        isPrimary ? styles.primaryLabel : styles.secondaryLabel
+                        isSecondary
+                            ? styles.secondaryLabel
+                            : styles.primaryLabel
                     }
                 >
                     {label}
@@ -64,6 +66,9 @@ const styles = StyleSheet.create({
     secondary: {
         borderWidth: sizes.borderWidth,
         borderColor: colors.borderStrong,
+    },
+    danger: {
+        backgroundColor: colors.danger,
     },
     inactive: {
         opacity: 0.4,
