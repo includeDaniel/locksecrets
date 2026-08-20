@@ -10,9 +10,10 @@ import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
 
-SplashScreen.preventAutoHideAsync().catch(() => {});
+import { colors } from "@/constants/tokens";
+import { SessionProvider, useSession } from "@/hooks/use-session";
 
-const BACKGROUND = "#0a0a0a";
+SplashScreen.preventAutoHideAsync().catch(() => {});
 
 export default function RootLayout() {
     const [loaded, error] = useFonts({ DMMono_400Regular, DMMono_500Medium });
@@ -28,14 +29,30 @@ export default function RootLayout() {
     }
 
     return (
-        <>
-            <Stack
-                screenOptions={{
-                    headerShown: false,
-                    contentStyle: { backgroundColor: BACKGROUND },
-                }}
-            />
+        <SessionProvider>
+            <RootNavigator />
             <StatusBar style="light" />
-        </>
+        </SessionProvider>
+    );
+}
+
+function RootNavigator() {
+    const { isSignedIn } = useSession();
+
+    return (
+        <Stack
+            screenOptions={{
+                headerShown: false,
+                contentStyle: { backgroundColor: colors.background },
+            }}
+        >
+            <Stack.Protected guard={isSignedIn}>
+                <Stack.Screen name="(app)" />
+            </Stack.Protected>
+
+            <Stack.Protected guard={!isSignedIn}>
+                <Stack.Screen name="(auth)" />
+            </Stack.Protected>
+        </Stack>
     );
 }
