@@ -1,0 +1,41 @@
+name: app
+
+on: push
+
+concurrency:
+    group: ci-${{ github.ref }}
+    cancel-in-progress: true
+
+permissions:
+    contents: read
+
+jobs:
+    checks:
+        name: Lint, typecheck, test
+        runs-on: ubuntu-latest
+        defaults:
+            run:
+                working-directory: locksecrets-app
+
+        steps:
+            - uses: actions/checkout@v4
+
+            - uses: actions/setup-node@v4
+              with:
+                  node-version: 22
+                  cache: npm
+                  cache-dependency-path: locksecrets-app/package-lock.json
+
+            - name: Install dependencies
+              run: npm ci
+
+            - name: Lint
+              run: npm run lint
+
+            - name: Typecheck
+              if: ${{ !cancelled() }}
+              run: npx tsc --noEmit
+
+            - name: Test
+              if: ${{ !cancelled() }}
+              run: npm run test:ci
